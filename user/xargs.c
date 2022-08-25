@@ -2,7 +2,7 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 #include "kernel/param.h"
-#define NULL ((void *)(-1))
+#define NULL ((void *)(0))
 #define EOF (-1)
 
 int
@@ -91,19 +91,20 @@ main(int argc, char *argv[]) {
     buf[args] = 0;
 
     if(fork() == 0) {
-        wait(&status);
-        if(status == 0) {
-            exit(0);
-        } else {
-            exit(1);
-        }
-    } else {
         // printf("Debug: exec command:");
         // for(int i = 0;buf[i] != 0;i++) {
         //     printf("%s ", buf[i]);
         // }
         // printf("\n");
         exec(buf[0], buf);
+    } else {
+        wait(&status);
+        if(status == 0) {
+            exit(0);
+        } else {
+            exit(1);
+        }
+
     }
     exit(0);
 }
